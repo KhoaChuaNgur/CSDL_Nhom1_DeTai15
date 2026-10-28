@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phạm Đăng Khoa · ePortfolio CSDL – Đề tài 15</title>
+<meta name="description" content="ePortfolio môn Cơ sở dữ liệu – Đề tài 15: Quản lý Dự án Phần mềm. Phạm Đăng Khoa, MSSV 526000180, lớp 26CT501, Đại học Lạc Hồng.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text x='50' y='68' font-size='56' text-anchor='middle' fill='%2300F2FE' font-family='monospace'>PK</text></svg>">
+<style>
+:root{
+  --bg:#0a0a0a;--bg2:#101014;--card:rgba(20,20,28,.72);--line:#242432;
+  --text:#c9ccd6;--muted:#868b9a;--white:#f4f6fb;
+  --cyan:#00F2FE;--purple:#b026ff;--grad:linear-gradient(120deg,#00F2FE,#b026ff);
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+  --sans:Inter,"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+/* ambient background */
+body::before{content:"";position:fixed;inset:0;z-index:-2;
+  background:
+   radial-gradient(600px 400px at 85% -5%,rgba(176,38,255,.22),transparent 70%),
+   radial-gradient(600px 400px at 0% 20%,rgba(0,242,254,.12),transparent 70%),
+   linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/48px 48px,
+   linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/48px 48px,var(--bg)}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:100;box-shadow:0 0 12px var(--cyan)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(10,10,10,.7);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:var(--mono);color:var(--white);font-weight:700}
+.logo b{color:var(--cyan)}
+nav ul{display:flex;gap:4px;list-style:none}
+nav a.l{display:block;padding:8px 14px;border-radius:8px;font-size:.9rem;color:var(--muted);transition:.2s}
+nav a.l:hover,nav a.l.on{color:var(--cyan);background:rgba(0,242,254,.08)}
+
+/* hero */
+.hero{padding:84px 0 70px;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+.badge{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:.8rem;color:var(--cyan);border:1px solid rgba(0,242,254,.35);padding:6px 14px;border-radius:99px;background:rgba(0,242,254,.06)}
+.badge i{width:8px;height:8px;border-radius:50%;background:#2cff8f;box-shadow:0 0 10px #2cff8f;animation:pulse 1.8s infinite}
+@keyframes pulse{50%{opacity:.3}}
+h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.1;color:var(--white);margin:20px 0 14px;letter-spacing:-.02em}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:1.1rem;max-width:560px;color:var(--text)}
+.sub b{color:var(--white)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:10px;font-weight:600;font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:.25s;font-family:inherit}
+.btn.p{background:var(--grad);color:#05050a;box-shadow:0 0 22px rgba(0,242,254,.35)}
+.btn.p:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(176,38,255,.5)}
+.btn.g{border-color:var(--line);color:var(--white);background:rgba(255,255,255,.03)}
+.btn.g:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+
+/* terminal card */
+.term{border:1px solid var(--line);border-radius:14px;background:rgba(12,12,18,.85);box-shadow:0 0 0 1px rgba(176,38,255,.15),0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(0,242,254,.08);overflow:hidden}
+.term .bar{display:flex;gap:7px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:#0e0e15}
+.term .bar span{width:11px;height:11px;border-radius:50%}
+.term .bar em{margin-left:auto;font:normal .75rem var(--mono);color:var(--muted)}
+.term pre{padding:20px;font:.86rem/1.9 var(--mono);color:var(--text);white-space:pre-wrap;word-break:break-word;min-height:250px}
+.k{color:var(--purple)}.s{color:var(--cyan)}.c{color:#5b6070}
+.cur{display:inline-block;width:8px;height:1em;background:var(--cyan);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* sections */
+section{padding:76px 0}
+.eyebrow{font:600 .8rem var(--mono);color:var(--purple);text-transform:uppercase;letter-spacing:.14em}
+h2{font-size:clamp(1.7rem,4vw,2.4rem);color:var(--white);margin:8px 0 12px;letter-spacing:-.01em}
+.lead{max-width:680px;color:var(--muted);margin-bottom:38px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;backdrop-filter:blur(8px);transition:.3s}
+.card:hover{border-color:rgba(0,242,254,.5);box-shadow:0 0 30px rgba(0,242,254,.1);transform:translateY(-3px)}
+
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.stat{text-align:center;padding:24px 10px}
+.stat strong{display:block;font-size:2.3rem;font-family:var(--mono);line-height:1.1}
+.stat small{color:var(--muted);font-size:.85rem}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;background:rgba(176,38,255,.14);border:1px solid rgba(176,38,255,.4);margin-bottom:14px}
+.feat h3{color:var(--white);font-size:1.05rem;margin-bottom:6px}
+.feat p{font-size:.93rem;color:var(--muted)}
+
+/* timeline */
+.tl{position:relative;display:grid;gap:22px;padding-left:34px}
+.tl::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--cyan),var(--purple))}
+.ms{position:relative}
+.ms::before{content:"";position:absolute;left:-30px;top:30px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 14px var(--cyan)}
+.ms .top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px}
+.pill{font:600 .75rem var(--mono);padding:4px 12px;border-radius:99px;border:1px solid var(--purple);color:#d9a6ff;background:rgba(176,38,255,.1)}
+.pill.c{border-color:var(--cyan);color:var(--cyan);background:rgba(0,242,254,.08)}
+.ms h3{color:var(--white);font-size:1.2rem}
+.ms ul{margin:10px 0 0 18px;color:var(--muted);font-size:.95rem}
+.ms li::marker{color:var(--cyan)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{font:.75rem var(--mono);color:var(--cyan);background:rgba(0,242,254,.07);border:1px solid rgba(0,242,254,.25);padding:3px 10px;border-radius:6px}
+
+/* diagrams */
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.fig{padding:0;overflow:hidden}
+.fig button.zoom{all:unset;display:block;cursor:zoom-in;position:relative;background:#fff;width:100%}
+.fig button.zoom img{width:100%;height:auto;aspect-ratio:16/10;object-fit:contain;transition:.4s}
+.fig:hover button.zoom img{transform:scale(1.03)}
+.fig button.zoom::after{content:"🔍 Bấm để phóng to";position:absolute;right:12px;bottom:12px;font:.75rem var(--mono);background:rgba(10,10,10,.85);color:var(--cyan);padding:6px 12px;border-radius:8px;border:1px solid rgba(0,242,254,.4)}
+.fig .cap{padding:20px 22px}
+.fig h3{color:var(--white);font-size:1.1rem}
+.fig p{color:var(--muted);font-size:.9rem;margin:4px 0 14px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.sm{padding:9px 16px;font-size:.85rem}
+
+/* docs */
+.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.doc{display:flex;flex-direction:column;gap:6px}
+.doc .ext{font:700 .8rem var(--mono);color:#05050a;background:var(--grad);padding:3px 10px;border-radius:6px;align-self:flex-start}
+.doc h3{color:var(--white);font-size:1.1rem;margin-top:6px}
+.doc p{color:var(--muted);font-size:.9rem;flex:1}
+.doc .go{color:var(--cyan);font-weight:600;font-size:.9rem;margin-top:8px}
+.doc:hover .go{letter-spacing:.03em}
+
+footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--muted);font-size:.9rem}
+footer b{color:var(--white)}
+
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:200;background:rgba(5,5,8,.94);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px}
+#lb.open{display:flex}
+#lb .imgbox{background:#fff;border-radius:10px;max-width:96vw;max-height:78vh;overflow:auto}
+#lb img{max-width:none;width:min(1400px,94vw)}
+#lb p{color:var(--muted);font:.85rem var(--mono)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);background:#0e0e15;border:1px solid var(--cyan);color:var(--cyan);padding:10px 20px;border-radius:10px;font:.85rem var(--mono);transition:.3s;z-index:300}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:48px}
+  .stats{grid-template-columns:repeat(2,1fr)}.stats .stat:last-child{grid-column:span 2}
+  .feat,.docs,.gal{grid-template-columns:1fr}
+  nav ul{display:none}
+}
+@media(max-width:520px){section{padding:54px 0}.btn{width:100%;justify-content:center}.tl{padding-left:28px}.ms::before{left:-26px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav><div class="wrap">
+  <a href="#top" class="logo">&lt;<b>PhamDangKhoa</b> /&gt;</a>
+  <ul>
+    <li><a class="l" href="#detai">Đề tài</a></li>
+    <li><a class="l" href="#timeline">Tiến độ</a></li>
+    <li><a class="l" href="#so-do">Sơ đồ</a></li>
+    <li><a class="l" href="#tai-lieu">Tài liệu</a></li>
+  </ul>
+</div></nav>
+
+<header class="wrap hero" id="top">
+  <div>
+    <span class="badge"><i></i> Môn Cơ sở dữ liệu · 111166</span>
+    <h1>Xin chào, mình là<br><span class="grad">Phạm Đăng Khoa</span></h1>
+    <p class="sub">Sinh viên <b>Đại học Lạc Hồng</b> – lớp <b>26CT501</b> (Hệ Liên thông). ePortfolio này trình bày đồ án <b>Đề tài 15: Quản lý Dự án Phần mềm</b> trên SQL Server 2022.</p>
+    <div class="cta">
+      <a class="btn p" href="#so-do">Xem sơ đồ ERD / PDM →</a>
+      <a class="btn g" href="#tai-lieu">Tài liệu nộp kèm</a>
+      <button class="btn g" id="copyId" type="button" title="Sao chép MSSV">📋 MSSV 526000180</button>
+    </div>
+  </div>
+  <div class="term" aria-label="Thông tin sinh viên">
+    <div class="bar"><span style="background:#ff5f56"></span><span style="background:#ffbd2e"></span><span style="background:#27c93f"></span><em>student.json</em></div>
+    <pre id="typed" data-text='<span class="k">const</span> student = {
+  <span class="s">"hoTen"</span>: <span class="s">"Phạm Đăng Khoa"</span>,
+  <span class="s">"mssv"</span>: <span class="s">"526000180"</span>,
+  <span class="s">"lop"</span>: <span class="s">"26CT501 (Liên thông)"</span>,
+  <span class="s">"mon"</span>: <span class="s">"Cơ sở dữ liệu (111166)"</span>,
+  <span class="s">"gvhd"</span>: <span class="s">"ThS. Phan Mạnh Thường"</span>,
+  <span class="s">"deTai"</span>: <span class="s">15</span>
+};'></pre>
+  </div>
+</header>
+
+<main>
+<section id="detai"><div class="wrap">
+  <div class="rv"><span class="eyebrow">01 · Đề tài</span>
+  <h2>Quản lý Dự án phần mềm</h2>
+  <p class="lead">Thiết kế và cài đặt cơ sở dữ liệu quản lý dự án trên <b style="color:var(--white)">SQL Server 2022</b>: phân rã công việc dạng cây WBS, kiểm soát nghiệp vụ bằng ràng buộc và trigger liên bảng.</p></div>
+
+  <div class="stats rv">
+    <div class="card stat"><strong class="grad" data-n="9">0</strong><small>bảng chuẩn BCNF</small></div>
+    <div class="card stat"><strong class="grad">WBS</strong><small>quan hệ đệ quy cây</small></div>
+    <div class="card stat"><strong class="grad" data-n="8">0</strong><small>RBTV</small></div>
+    <div class="card stat"><strong class="grad">R8</strong><small>Trigger liên bảng</small></div>
+    <div class="card stat"><strong class="grad" data-n="20">0</strong><small>truy vấn T-SQL</small></div>
+  </div>
+
+  <div class="feat rv">
+    <div class="card"><div class="ic">🧱</div><h3>Chuẩn hóa BCNF</h3><p>9 bảng được chứng minh đạt 3NF/BCNF qua bao đóng của tập phụ thuộc hàm.</p></div>
+    <div class="card"><div class="ic">🌳</div><h3>Cây WBS đệ quy</h3><p>CONGVIEC tự tham chiếu qua MaCVParent, mô tả công việc cha – con nhiều cấp.</p></div>
+    <div class="card"><div class="ic">⚡</div><h3>Trigger R8 &amp; 20 truy vấn</h3><p>Trigger kiểm soát liên bảng cùng bộ 20 câu T-SQL thuộc 5 nhóm kỹ thuật.</p></div>
+  </div>
+</div></section>
+
+<section id="timeline"><div class="wrap">
+  <div class="rv"><span class="eyebrow">02 · Tiến độ</span>
+  <h2>Timeline 15 tuần</h2>
+  <p class="lead">Ba mốc chính từ khảo sát nghiệp vụ đến chuẩn hóa và tự động hóa báo cáo.</p></div>
+
+  <div class="tl">
+    <article class="ms card rv">
+      <div class="top"><span class="pill c">Mốc 1</span><span class="pill">Tuần 1 – 6</span></div>
+      <h3>Khảo sát &amp; thiết kế mô hình</h3>
+      <ul>
+        <li>Khảo sát 8 quy tắc nghiệp vụ (QT1–QT8).</li>
+        <li>Thiết kế sơ đồ CDM/ERD thực thể kết hợp.</li>
+        <li>Xây dựng mô hình quan hệ PDM trên Draw.io.</li>
+      </ul>
+      <div class="chips"><span>QT1–QT8</span><span>CDM/ERD</span><span>PDM</span><span>Draw.io</span></div>
+    </article>
+    <article class="ms card rv">
+      <div class="top"><span class="pill c">Mốc 2</span><span class="pill">Tuần 7 – 12</span></div>
+      <h3>Cài đặt &amp; truy vấn</h3>
+      <ul>
+        <li>Cài đặt DDL trên SQL Server 2022.</li>
+        <li>Lập trình Trigger liên bảng R8.</li>
+        <li>Nạp bộ dữ liệu mẫu biên (&gt;100 records).</li>
+        <li>Viết 20 câu truy vấn T-SQL thuộc 5 nhóm kỹ thuật.</li>
+      </ul>
+      <div class="chips"><span>DDL</span><span>Trigger R8</span><span>&gt;100 records</span><span>20 T-SQL</span></div>
+    </article>
+    <article class="ms card rv">
+      <div class="top"><span class="pill c">Mốc 3</span><span class="pill">Tuần 13 – 15</span></div>
+      <h3>Chuẩn hóa &amp; tự động hóa báo cáo</h3>
+      <ul>
+        <li>Chứng minh chuẩn hóa 3NF/BCNF qua bao đóng.</li>
+        <li>Lập bảng ma trận tầm ảnh hưởng 9x8.</li>
+        <li>Tự động hóa tài liệu báo cáo bằng python-docx.</li>
+      </ul>
+      <div class="chips"><span>3NF/BCNF</span><span>Ma trận 9x8</span><span>python-docx</span></div>
+    </article>
+  </div>
+</div></section>
+
+<section id="so-do"><div class="wrap">
+  <div class="rv"><span class="eyebrow">03 · Sơ đồ</span>
+  <h2>Mô hình dữ liệu</h2>
+  <p class="lead">Bấm vào ảnh để phóng to, hoặc tải về bản PNG gốc.</p></div>
+
+  <div class="gal">
+    <figure class="card fig rv">
+      <button class="zoom" type="button" data-src="assets/erd-cdm.png" data-cap="Mô hình thực thể kết hợp ERD (CDM)" aria-label="Phóng to mô hình ERD">
+        <img src="assets/erd-cdm.png" alt="Mô hình thực thể kết hợp ERD của Đề tài 15" loading="lazy">
+      </button>
+      <figcaption class="cap">
+        <h3>Mô hình ERD (CDM)</h3>
+        <p>Các thực thể KHACHHANG, DUAN, CONGVIEC, THANHVIEN, KYNANG, VAITRO, GHINHAN_GIOLAM và quan hệ đệ quy phân rã công việc.</p>
+        <div class="row">
+          <a class="btn p sm" href="assets/erd-cdm.png" target="_blank" rel="noopener">Mở ảnh ↗</a>
+          <a class="btn g sm" href="assets/erd-cdm.png" download>⬇ Tải .png</a>
+        </div>
+      </figcaption>
+    </figure>
+    <figure class="card fig rv">
+      <button class="zoom" type="button" data-src="assets/so-do-quan-he-pdm.png" data-cap="Sơ đồ quan hệ PDM" aria-label="Phóng to sơ đồ quan hệ">
+        <img src="assets/so-do-quan-he-pdm.png" alt="Sơ đồ quan hệ PDM của Đề tài 15" loading="lazy">
+      </button>
+      <figcaption class="cap">
+        <h3>Sơ đồ quan hệ (PDM)</h3>
+        <p>9 bảng vật lý cùng khóa chính, khóa ngoại, kiểu dữ liệu và ràng buộc UNIQUE.</p>
+        <div class="row">
+          <a class="btn p sm" href="assets/so-do-quan-he-pdm.png" target="_blank" rel="noopener">Mở ảnh ↗</a>
+          <a class="btn g sm" href="assets/so-do-quan-he-pdm.png" download>⬇ Tải .png</a>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</div></section>
+
+<section id="tai-lieu"><div class="wrap">
+  <div class="rv"><span class="eyebrow">04 · Tài liệu</span>
+  <h2>Danh mục tài liệu nộp kèm</h2>
+  <p class="lead">Toàn bộ sản phẩm của đồ án, bấm để mở hoặc tải về.</p></div>
+
+  <div class="docs">
+    <a class="card doc rv" href="CSDL_Nhom1_DeTai15_.docx" download>
+      <span class="ext">.DOCX</span><h3>Tệp báo cáo</h3><p>Báo cáo đồ án đầy đủ: phân tích, thiết kế, chuẩn hóa, truy vấn và nhật ký ePortfolio.</p><span class="go">Tải báo cáo →</span>
+    </a>
+    <a class="card doc rv" href="https://github.com/KhoaChuaNgur/CSDL_DeTai15_QLDA" target="_blank" rel="noopener">
+      <span class="ext">.SQL</span><h3>Script T-SQL</h3><p>DDL, Trigger R8, dữ liệu mẫu và bộ 20 truy vấn trên SQL Server 2022 (kho GitHub).</p><span class="go">Mở kho mã nguồn ↗</span>
+    </a>
+    <a class="card doc rv" href="#so-do">
+      <span class="ext">.PNG</span><h3>Sơ đồ quan hệ</h3><p>Sơ đồ ERD (CDM) và sơ đồ quan hệ (PDM) xây dựng trên Draw.io.</p><span class="go">Xem sơ đồ →</span>
+    </a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p><b>Phạm Đăng Khoa</b> · MSSV 526000180 · Lớp 26CT501 · Đại học Lạc Hồng</p>
+  <p>GVHD: ThS. Phan Mạnh Thường · © 2026</p>
+</div></footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Xem ảnh phóng to">
+  <div class="imgbox"><img id="lbImg" alt=""></div>
+  <p id="lbCap"></p>
+  <button class="btn g sm" id="lbClose" type="button">✕ Đóng (Esc)</button>
+</div>
+<div id="toast">Đã sao chép MSSV</div>
+
+<script>
+(function(){
+  // progress bar
+  var bar=document.getElementById('progress');
+  addEventListener('scroll',function(){
+    var h=document.documentElement;
+    bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  },{passive:true});
+
+  // typing effect (HTML-aware)
+  var pre=document.getElementById('typed'),src=pre.dataset.text,i=0,out='',inTag=false;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){pre.innerHTML=src}else{
+    (function tick(){
+      if(i>=src.length){pre.innerHTML=src+'<span class="cur"></span>';return}
+      var ch=src[i++];out+=ch;
+      if(ch==='<')inTag=true;
+      if(ch==='>')inTag=false;
+      if(inTag){tick();return}
+      pre.innerHTML=out+'<span class="cur"></span>';
+      setTimeout(tick,14);
+    })();
+  }
+
+  // reveal + counters
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    e.target.classList.add('in');
+    e.target.querySelectorAll('[data-n]').forEach(count);
+    io.unobserve(e.target);
+  })},{threshold:.15});
+  document.querySelectorAll('.rv').forEach(function(el,k){el.style.transitionDelay=(k%3)*90+'ms';io.observe(el)});
+  function count(el){
+    var n=+el.dataset.n,c=0,step=Math.max(1,Math.round(n/20));
+    var t=setInterval(function(){c+=step;if(c>=n){c=n;clearInterval(t)}el.textContent=c},40);
+  }
+
+  // active nav link
+  var links=[].slice.call(document.querySelectorAll('nav a.l'));
+  var so=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting)links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)});
+  })},{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(function(s){so.observe(s)});
+
+  // lightbox
+  var lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');
+  document.querySelectorAll('button.zoom').forEach(function(b){b.addEventListener('click',function(){
+    lbImg.src=b.dataset.src;lbImg.alt=b.dataset.cap;lbCap.textContent=b.dataset.cap;lb.classList.add('open');document.body.style.overflow='hidden';
+  })});
+  function close(){lb.classList.remove('open');document.body.style.overflow=''}
+  document.getElementById('lbClose').onclick=close;
+  lb.addEventListener('click',function(e){if(e.target===lb)close()});
+  addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+
+  // copy MSSV
+  var toast=document.getElementById('toast');
+  document.getElementById('copyId').onclick=function(){
+    var done=function(){toast.classList.add('show');setTimeout(function(){toast.classList.remove('show')},1800)};
+    if(navigator.clipboard)navigator.clipboard.writeText('526000180').then(done,done);else done();
+  };
+})();
+</script>
+</body>
+</html>
